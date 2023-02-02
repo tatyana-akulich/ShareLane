@@ -1,1 +1,1 @@
-<h1>This project contains tests for ShareLane</h1>>
+<h1>This project contains tests for ShareLane</h1>
