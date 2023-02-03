@@ -33,6 +33,7 @@ public class RegistrationFormTest {
                 {new RegistrationForm(" Ann", "129@tmmcv.com", "12345"), false}, //fails - name starting from whitespace is a bug
                 {new RegistrationForm("***", "1210@tmmcv.com", "12345"), false},
                 {new RegistrationForm("t_a", "1211@tmmcv.com", "12345"), false},
+                {new RegistrationForm("Татьяна", "1234@tmmcv.com", "12345"), true}, //fails
                 {new RegistrationForm("Tatyana", "1212@tmmcv.com", "12345"), true}, // tests for email
                 {new RegistrationForm("Tatyana", "1212@tmmcv.com", "12345"), false}, //fails - previously used email
                 {new RegistrationForm("Tatyana", "1213tmmcv.com", "12345"), false},
@@ -52,6 +53,12 @@ public class RegistrationFormTest {
                 {new RegistrationForm("Tatyana", "1225@tmmcv.com", "1234а"), true},
                 {new RegistrationForm("Tatyana", "1226@tmmcv.com", "aaaa*"), true},
                 {new RegistrationForm("Tatyana", "1227@tmmcv.com", "12345", "1234"), false}, //test for confirmation - fails
+                {new RegistrationForm("Tatyana", "", "1228@tmmcv.com", "12345", "12345"), true}, //tests for Last Name
+                {new RegistrationForm("Tatyana", "Tatyana", "1229@tmmcv.com", "12345", "12345"), true},
+                {new RegistrationForm("Tatyana", "Tat1", "1230@tmmcv.com", "12345", "12345"), false}, //fails - name with digits shouldn't be accepted
+                {new RegistrationForm("Tatyana", " ", "1231@tmmcv.com", "12345", "12345"), true},
+                {new RegistrationForm("Tatyana", "***", "1232@tmmcv.com", "12345", "12345"), false}, // fails - name with special chars shouldn't be accepted
+                {new RegistrationForm("Tatyana", "Абв", "1233@tmmcv.com", "12345", "12345"), true},
         };
     }
 
@@ -60,6 +67,8 @@ public class RegistrationFormTest {
         driver.get("https://www.sharelane.com/cgi-bin/register.py?page=1&zip_code=12345");
         WebElement firstNameInput = driver.findElement(By.name("first_name"));
         firstNameInput.sendKeys(registrationFormData.getFirstName());
+        WebElement lastNameInput = driver.findElement(By.name("last_name"));
+        lastNameInput.sendKeys(registrationFormData.getLastName());
         WebElement emailInput = driver.findElement(By.name("email"));
         emailInput.sendKeys(registrationFormData.getEmail());
         WebElement passwordInput = driver.findElement(By.name("password1"));
